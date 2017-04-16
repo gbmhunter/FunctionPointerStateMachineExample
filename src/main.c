@@ -15,13 +15,13 @@ int main() {
     printf("State is now %s.\r\n", StateMachine_GetStateName(stateMachine.currState));
 
     // Run first iteration
-    StateMachine_Run(&stateMachine);
+    StateMachine_RunIteration(&stateMachine);
     printf("State is now %s.\r\n", StateMachine_GetStateName(stateMachine.currState));
 
     // Let's pretend a button was pushed
     buttonPushed = true;
     printf("Button pushed.\r\n");
-    StateMachine_Run(&stateMachine);
+    StateMachine_RunIteration(&stateMachine);
     printf("State is now %s.\r\n", StateMachine_GetStateName(stateMachine.currState));
 
     return 0;

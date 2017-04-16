@@ -13,7 +13,7 @@ typedef struct {
 } stateMachine_t;
 
 void StateMachine_Init(stateMachine_t * stateMachine);
-void StateMachine_Run(stateMachine_t * stateMachine);
+void StateMachine_RunIteration(stateMachine_t *stateMachine);
 const char * StateMachine_GetStateName(state_t state);
 
 #endif

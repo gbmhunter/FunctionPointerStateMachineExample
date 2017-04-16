@@ -15,18 +15,20 @@ typedef struct {
 ///         when the state transitions into this state.
 /// @warning    This has to stay in sync with the state_t enum!
 static stateFunctionRow_t stateFunctionA[] = {
+      // NAME         // FUNC
     { "ST_INIT",      &Led_Init },      // ST_INIT
     { "ST_IDLE",      &Led_Idle },      // ST_IDLE
     { "ST_LED_ON",    &Led_On },        // ST_LED_ON
     { "ST_LED_OFF",   &Led_Off },       // ST_LED_OFF
 };
 
-
+/// @brief      All the possible events that can occur for this state machine.
+/// @details    Unlike states_t, these do not need to be kept in a special order.
 typedef enum {
     EV_ANY,
+    EV_NONE,
     EV_BUTTON_PUSHED,
     EV_TIME_OUT,
-    EV_NONE
 } event_t;
 
 typedef struct {
@@ -36,7 +38,7 @@ typedef struct {
 } stateTransMatrixRow_t;
 
 static stateTransMatrixRow_t stateTransMatrix[] = {
-    //  CURR STATE // EVENT           // NEXT STATE
+    // CURR STATE  // EVENT           // NEXT STATE
     { ST_INIT,     EV_ANY,               ST_IDLE    },
     { ST_IDLE,     EV_BUTTON_PUSHED,     ST_LED_ON  },
     { ST_LED_ON,   EV_TIME_OUT,          ST_LED_OFF },
@@ -53,19 +55,21 @@ void StateMachine_Init(stateMachine_t * stateMachine) {
 }
 
 event_t StateMachine_GetEvent() {
-    printf("StateMachine_GetEvent() called.\r\n");
-
-    if(buttonPushed)
+    if(buttonPushed) {
+        buttonPushed = false;
         return EV_BUTTON_PUSHED;
+    }
 
     // No event
     return EV_NONE;
 }
 
-void StateMachine_Run(stateMachine_t * stateMachine) {
-    // Run the main state machine (handles everything else)
+void StateMachine_RunIteration(stateMachine_t *stateMachine) {
+    // Get an event
     event = StateMachine_GetEvent();
 
+    // Iterate through the state transition matrix, checking if there is both a match with the current state
+    // and the event
     for(int i = 0; i < sizeof(stateTransMatrix)/sizeof(stateTransMatrix[0]); i++) {
         if(stateTransMatrix[i].currState == stateMachine->currState) {
             if((stateTransMatrix[i].event == event) || (stateTransMatrix[i].event == EV_ANY)) {
