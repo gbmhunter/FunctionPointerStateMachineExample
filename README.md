@@ -1,0 +1,1 @@
+Example code that goes alongside the tutorial at http://blog.mbedded.ninja/programming/general/control-methodology/a-function-pointer-based-state-machine.
