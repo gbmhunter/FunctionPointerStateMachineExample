@@ -1,4 +1,3 @@
-project(NewtonRaphson)
 
 set(HEADER_FILES
         main.h
